@@ -1,3 +1,4 @@
+/*Claude Code*/
 * {
   box-sizing: border-box;
 }
@@ -19,7 +20,6 @@ input {
   outline: none;
 }
 
-/* width in vh: same physical width on screens of the same physical height */
 .container {
   height: calc(100vh - 4vh);
   width: 60vh;
@@ -77,6 +77,17 @@ input {
   flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+.item-text mark {
+  color: #000;
+  background-color: #fff;
+}
+
+.item-date {
+  flex-shrink: 0;
+  min-width: 10ch;
+  min-height: 1lh;
 }
 
 .remove {
