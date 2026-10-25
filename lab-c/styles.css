@@ -1,0 +1,50 @@
+:root {
+  --bg: #121212;
+  --green: #1db954;
+  --black: #000000;
+  --gap: 24px;
+  /* Two rows of boxes plus the gap must fit the viewport height. */
+  --box-size: min(40vw, calc((100vh - 3 * var(--gap)) / 2));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  display: grid;
+  place-items: center;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(2, var(--box-size));
+  gap: var(--gap);
+}
+
+.box {
+  width: var(--box-size);
+  height: var(--box-size);
+  background-color: var(--green);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.box-top {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+.box-inner {
+  width: 90%;
+  height: 90%;
+  background-color: var(--black);
+}

@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #121212;
+}
+
+input {
+  padding: 0.6vh 1.5vh;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  outline: none;
+}
+
+/* width in vh: same physical width on screens of the same physical height */
+.container {
+  height: calc(100vh - 4vh);
+  width: 60vh;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2vh;
+  padding: 4vh 0;
+  border-radius: 3vh;
+  background-color: #1db954;
+}
+
+.search,
+.screen,
+.add {
+  width: 90%;
+}
+
+.search,
+.add input {
+  color: #fff;
+  background-color: #000;
+  color-scheme: dark;
+}
+
+.screen input {
+  color: #000;
+  background-color: #fff;
+}
+
+.screen {
+  flex: 1;
+  min-height: 0;
+  padding: 6px;
+  overflow-y: auto;
+  border-radius: 1vh;
+  background-color: #000;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+  padding: 1vh 0;
+  color: #fff;
+}
+
+.item + .item {
+  border-top: 1px solid #fff;
+}
+
+.item-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.remove {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 3vh;
+  height: 3vh;
+  padding: 0;
+  border: none;
+  border-radius: 0.6vh;
+  background-color: #e22134;
+  cursor: pointer;
+}
+
+.remove::before {
+  content: "";
+  width: 50%;
+  height: 2px;
+  background-color: #fff;
+}
+
+.add {
+  display: flex;
+  gap: 0.5vh;
+}
+
+.add-text {
+  width: 50%;
+}
+
+.add-date {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-button {
+  flex-shrink: 0;
+  position: relative;
+  width: 3.5vh;
+  height: 3.5vh;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #2e77d0;
+  cursor: pointer;
+}
+
+.add-button::before,
+.add-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 2px;
+  background-color: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.add-button::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
