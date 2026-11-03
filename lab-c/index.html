@@ -4,17 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Imie Nazwisko (00000) - AI LAB C</title>
-
+    <link rel="stylesheet" href="leaflet-1.9.4/leaflet.css">
     <link rel="stylesheet" href="styles.css" type="text/css">
+    <script src="leaflet-1.9.4/leaflet-src.js"></script>
+    <script src="leaflet-1.9.4/leaflet-providers.js"></script>
+    <script src="leaflet-1.9.4/leaflet-image.js"></script>
     <script src="scripts.js" defer></script>
 </head>
 <body>
     <main class="layout">
         <div class="box box-top">
-            <div class="box-inner"></div>
+            <div class="box-inner">
+                <div id="map"></div>
+            </div>
+            <button id="shuffle" class="btn btn-side btn-left" type="button">Shuffle</button>
+            <button id="to-canvas" class="btn btn-side btn-right" type="button">To Canvas</button>
         </div>
         <div class="box">
-            <div class="box-inner"></div>
+            <div class="box-inner">
+                <canvas id="raster-map"></canvas>
+            </div>
         </div>
         <div class="box">
             <div class="box-inner"></div>
