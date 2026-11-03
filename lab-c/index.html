@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Imie Nazwisko (00000) - AI LAB C</title>
+    <title>Michal Marcinkowski (51043) - AI LAB C</title>
     <link rel="stylesheet" href="leaflet-1.9.4/leaflet.css">
     <link rel="stylesheet" href="styles.css" type="text/css">
     <script src="leaflet-1.9.4/leaflet-src.js"></script>
@@ -17,16 +17,19 @@
             <div class="box-inner">
                 <div id="map"></div>
             </div>
-            <button id="shuffle" class="btn btn-side btn-left" type="button">Shuffle</button>
-            <button id="to-canvas" class="btn btn-side btn-right" type="button">To Canvas</button>
-        </div>
-        <div class="box">
-            <div class="box-inner">
-                <canvas id="raster-map"></canvas>
+            <div class="btn-side btn-left">
+                <button id="get-location" class="btn" type="button">Get Location</button>
+                <button id="shuffle" class="btn" type="button">Shuffle</button>
+            </div>
+            <div class="btn-side btn-right">
+                <button id="to-canvas" class="btn" type="button">To Canvas</button>
             </div>
         </div>
         <div class="box">
-            <div class="box-inner"></div>
+            <div id="raster-map" class="box-inner-grid"></div>
+        </div>
+        <div class="box">
+            <div id="target" class="box-inner-grid"></div>
         </div>
     </main>
 </body>
