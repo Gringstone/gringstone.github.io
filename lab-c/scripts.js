@@ -1,36 +1,142 @@
-let map = L.map('map').setView([53.430127, 14.564802], 18);
+const GRID = 4;
+document.documentElement.style.setProperty("--grid", GRID);
+
+let latitude = 53.430127;
+let longitude = 14.564802;
+
+let map = L.map('map').setView([latitude, longitude], 18);
 L.tileLayer.provider('Esri.WorldImagery').addTo(map);
 
-const GRID = 4;
+let locationMarker = null;
+
+document.getElementById("get-location").addEventListener("click", getLocation);
 
 let rasterMap = document.getElementById("raster-map");
-let rasterContext = rasterMap.getContext("2d");
 
-// Snapshot of the map from the last "To Canvas" click.
-let snapshot = null;
+let target = document.getElementById("target");
 
-// Rounded edges of cell i when size is split into GRID parts, so cells
-// meet exactly without hairline gaps between them.
-function cellEdges(i, size) {
-  let start = Math.round(i * size / GRID);
-  let end = Math.round((i + 1) * size / GRID);
-  return [start, end - start];
+function getLocation() {
+  if (! navigator.geolocation) {
+    alert("Sorry, no geolocation available for you!");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+    map.setView([latitude, longitude], 18);
+
+    if (!locationMarker) {
+      locationMarker = L.marker([latitude, longitude]).addTo(map);
+    }
+
+    locationMarker
+      .setLatLng([latitude, longitude])
+      .bindPopup(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`)
+      .openPopup();
+  }, (positionError) => {
+    console.error(positionError);
+  }, {
+    enableHighAccuracy: false
+  });
 }
 
-// order[slot] is the index of the piece drawn in that slot; the slots and
-// pieces are numbered row by row, 0 to GRID * GRID - 1.
+for (let i = 0; i < GRID * GRID; i++) {
+  let slot = document.createElement("div");
+  slot.className = "slot";
+  slot.id = "slot-" + i;
+  target.appendChild(slot);
+}
+
+
+document.addEventListener("dragstart", function (event) {
+  let piece = event.target.closest(".piece");
+  if (piece) {
+    event.dataTransfer.setData("text/plain", piece.id);
+  }
+});
+
+target.addEventListener("dragenter", function (event) {
+  let slot = event.target.closest(".slot");
+  if (slot) {
+    slot.classList.add("slot-over");
+  }
+});
+
+target.addEventListener("dragleave", function (event) {
+  let slot = event.target.closest(".slot");
+  if (slot && !slot.contains(event.relatedTarget)) {
+    slot.classList.remove("slot-over");
+  }
+});
+
+target.addEventListener("dragover", function (event) {
+  if (event.target.closest(".slot")) {
+    event.preventDefault();
+  }
+});
+
+target.addEventListener("drop", function (event) {
+  let slot = event.target.closest(".slot");
+  if (!slot) {
+    return;
+  }
+  event.preventDefault();
+  slot.classList.remove("slot-over");
+
+  let piece = document.getElementById(event.dataTransfer.getData("text/plain"));
+  if (!piece || piece.parentElement === slot) {
+    return;
+  }
+
+  let occupant = slot.querySelector(".piece");
+  if (occupant) {
+    piece.parentElement.appendChild(occupant);
+  }
+  slot.appendChild(piece);
+
+  if (isSolved()) {
+    console.debug("success");
+    if (Notification.permission === "granted") {
+      const notification = new Notification("Success");
+    } else {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          const notification = new Notification("Success");
+        }
+      });
+    }
+  }
+});
+
+function isSolved() {
+  for (let i = 0; i < GRID * GRID; i++) {
+    let piece = document.getElementById("slot-" + i).querySelector(".piece");
+    if (!piece || piece.id !== "piece-" + i) {
+      return false;
+    }
+  }
+  return true;
+}
+
+let snapshotUrl = null;
+
 function drawPieces(order) {
-  rasterMap.width = rasterMap.clientWidth;
-  rasterMap.height = rasterMap.clientHeight;
+  rasterMap.replaceChildren();
+  target.querySelectorAll(".piece").forEach(piece => piece.remove());
 
   for (let slot = 0; slot < order.length; slot++) {
     let piece = order[slot];
-    let [sx, sw] = cellEdges(piece % GRID, snapshot.width);
-    let [sy, sh] = cellEdges(Math.floor(piece / GRID), snapshot.height);
-    let [dx, dw] = cellEdges(slot % GRID, rasterMap.width);
-    let [dy, dh] = cellEdges(Math.floor(slot / GRID), rasterMap.height);
+    let col = piece % GRID;
+    let row = Math.floor(piece / GRID);
 
-    rasterContext.drawImage(snapshot, sx, sy, sw, sh, dx, dy, dw, dh);
+    let cell = document.createElement("div");
+    cell.className = "piece";
+    cell.id = "piece-" + piece;
+    cell.draggable = true;
+    cell.style.backgroundImage = `url(${snapshotUrl})`;
+    cell.style.backgroundPosition = `${col * 100 / (GRID - 1)}% ${row * 100 / (GRID - 1)}%`;
+    rasterMap.appendChild(cell);
   }
 }
 
@@ -42,7 +148,6 @@ function inOrder() {
   return order;
 }
 
-// Fisher-Yates shuffle.
 function shuffled(order) {
   for (let i = order.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
@@ -57,14 +162,16 @@ document.getElementById("to-canvas").addEventListener("click", function() {
       console.error(err);
       return;
     }
-    snapshot = canvas;
+    snapshotUrl = canvas.toDataURL();
     drawPieces(inOrder());
   });
 });
 
 document.getElementById("shuffle").addEventListener("click", function() {
-  if (!snapshot) {
+  if (!snapshotUrl) {
     return;
   }
   drawPieces(shuffled(inOrder()));
 });
+
+
