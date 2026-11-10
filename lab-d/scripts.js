@@ -1,6 +1,6 @@
 //claude
 const API_KEY = "b952ecc3e6187d9102fca2ec449a6fd8";
-const GEO_URL = "http://api.openweathermap.org/geo/1.0/direct";
+const GEO_URL = "https://api.openweathermap.org/geo/1.0/direct";
 const CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather";
 const FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast";
 
