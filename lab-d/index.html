@@ -1,9 +1,10 @@
+<!-- claude -->
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Imie Nazwisko (00000) - AI LAB D</title>
+    <title>Michal Marcinkowski (51043) - AI LAB D</title>
 
     <link rel="stylesheet" href="styles.css" type="text/css">
     <script src="scripts.js" defer></script>
@@ -12,8 +13,11 @@
     <main class="layout">
         <section class="column column--left">
             <div class="card card--title">Current Weather</div>
-            <div class="card card--solo" id="current"></div>
-            <input class="search" id="search" type="search" placeholder="Search..." aria-label="Search">
+            <div class="card card--solo current" id="current"></div>
+            <form class="search-bar" id="search-form">
+                <input class="search" id="search" type="search" placeholder="Search..." aria-label="Search">
+                <button class="search-button" type="submit">Search</button>
+            </form>
         </section>
 
         <section class="column column--right">
